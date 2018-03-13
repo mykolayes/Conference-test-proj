@@ -59,12 +59,22 @@ public class ConferenceApi {
         //TeeShirtSize userShirtSize = userProfile.getTeeShirtSize();
         //TeeShirtSize teeShirtSize = TeeShirtSize.NOT_SPECIFIED;
         if (userProfile != null) {
-        	 displayName = userProfile.getDisplayName();
-        	 teeShirtSize = userProfile.getTeeShirtSize();
+        	if (userProfile.getDisplayName() != null) {
+        		displayName = userProfile.getDisplayName();
+        	}
+        	else {
+        		displayName = null;
+        	}
+        	 if (userProfile.getTeeShirtSize() != null) {
+        		 teeShirtSize = userProfile.getTeeShirtSize();
+        	 }
+        	 else {
+        		 teeShirtSize = TeeShirtSize.NOT_SPECIFIED;
+        	 }
         } else {
         	displayName = null;
         	teeShirtSize = TeeShirtSize.NOT_SPECIFIED;
-        }
+       	 }
 
         // TODO 2
         // If the user is not logged in, throw an UnauthorizedException
@@ -88,8 +98,8 @@ public class ConferenceApi {
         // TODO 2
         // If the displayName is null, set it to default value based on the user's email
         // by calling extractDefaultDisplayNameFromEmail(...)
-        if (displayName != null) {
-        	extractDefaultDisplayNameFromEmail(mainEmail);
+        if (displayName == null) {
+        	displayName = extractDefaultDisplayNameFromEmail(mainEmail);
         }
 
         // Create a new Profile entity from the
@@ -99,6 +109,7 @@ public class ConferenceApi {
         	profile = new Profile(userId, displayName, mainEmail, teeShirtSize);
         }
         else {
+        	if (displayName != null && teeShirtSize != TeeShirtSize.NOT_SPECIFIED)
         	profile.update(displayName,teeShirtSize);
         }
         // TODO 3 (In Lesson 3)
